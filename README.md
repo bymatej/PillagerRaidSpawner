@@ -16,7 +16,7 @@ Only `raid.control` permission is needed.
 If you don't care about the permissions, just make yourself an OP on the server.
 
 # How it works?
-You have one command used to start and stop the raid. Once the start command is executed, the raid is spawned every X minutes. X is the number of minutes, and it is defined in the command itself. Omitting the amounts of minutes defaults to 2 minutes.
+You have one command that's used to start and stop the raid. Once the start command is executed, the raid is spawned every X minutes. X is the number of minutes, and it is defined in the command itself. Omitting the amounts of minutes defaults to 2 minutes.
 
 ## Command
 Example command: `/raid start 5`  
@@ -74,7 +74,11 @@ Meaning of each difficulty level:
 
 
 ##### Useful information
-The Raiders that are spawned are randomized. If you noticed the "Possible type of Raiders that may spawn" column in the previous table, those are the Raiders "spawnable" based on the difficulty. And which Raider will be spawned on each Raid is random. On `medium` difficulty one Raid may be "Witch, Pillager, Pillager, Pillager", on another it can be "4 Pillagers", and on another it can be "Vindicator, Witch, Pillager, Vindicator". As said - it's random every time.
+The Raiders that are spawned are randomized. If you noticed the "Possible type of Raiders that may spawn" column in the previous table, those are the Raiders "spawnable" based on the difficulty. And which Raider will be spawned on each Raid is random. On `medium` difficulty one Raid may be "Witch, Pillager, Pillager, Pillager", on another it can be "4 Pillagers", and on another it can be "Vindicator, Witch, Pillager, Vindicator". As said - it's random every time.  
+
+Raiders are spawned per online player on the server. This means that if there is 1 player on the server, and the difficulty is on `medium`, 4 Raiders will spawn upon initiating the command.  
+If there are 3 players on the server, 4 Raiders will spawn for each player. That means 4×3 = 12 Raiders in total.
+
 
 ##### Command examples
 - `/raid start` (start the raid with default values - same as `/raid start 2 0.05 false medium`)
