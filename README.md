@@ -4,7 +4,7 @@ Raids are spawned for each player on the server, somewhere around the player at 
 
 # How to install?
 Just put the Jar file into plugins folder.  
-The JAR file can be found in Releases.
+The JAR file can be found in the [Releases](https://github.com/bymatej/PillagerRaidSpawner/releases).
 
 ## Are there any permissions needed?
 Only `raid.control` permission is needed.  
