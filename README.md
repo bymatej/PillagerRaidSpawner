@@ -2,6 +2,11 @@
 This is a Spigot plugin that spawns some Raiders every X minutes (where X can be a whole number between 1 and 60, inclusively).  
 Raids are spawned for each player on the server, somewhere around the player at a random (but visible) location.
 
+# Dependencies and versions 
+This was developed and tested using Spigot 1.19.2 API (`org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT`). During the development Java 11 was used. During testing (on local Spigot server) Java 18 was used. Minecraft 1.19.2 was also used in testing.  
+
+This project also depends on [my minecraft plugin utils](https://github.com/bymatej/minecraft-plugin-utils).
+
 # How to install?
 Just put the Jar file into plugins folder.  
 The JAR file can be found in the [Releases](https://github.com/bymatej/PillagerRaidSpawner/releases).
