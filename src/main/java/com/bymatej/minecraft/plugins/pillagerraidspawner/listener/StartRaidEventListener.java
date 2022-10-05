@@ -11,7 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
 
-import com.bymatej.minecraft.plugins.pillagerraidspawner.command.StartPillagerRaidCommand.Difficulty;
+import com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty;
 import com.bymatej.minecraft.plugins.pillagerraidspawner.common.PossibleRaiders.PossibleEasyRaiders;
 import com.bymatej.minecraft.plugins.pillagerraidspawner.common.PossibleRaiders.PossibleHardRaiders;
 import com.bymatej.minecraft.plugins.pillagerraidspawner.common.PossibleRaiders.PossibleMediumRaiders;
@@ -21,9 +21,9 @@ import static com.bymatej.minecraft.plugin.utils.entity.NearPlayerEntitySpawner.
 import static com.bymatej.minecraft.plugin.utils.logging.LoggingUtils.log;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.PillagerRaidSpawner.DEBUG;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.PillagerRaidSpawner.getPluginReference;
-import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.StartPillagerRaidCommand.Difficulty.EASY;
-import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.StartPillagerRaidCommand.Difficulty.HARD;
-import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.StartPillagerRaidCommand.Difficulty.MEDIUM;
+import static com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty.EASY;
+import static com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty.HARD;
+import static com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty.MEDIUM;
 import static java.lang.Integer.MAX_VALUE;
 import static java.math.BigDecimal.ONE;
 import static java.math.RoundingMode.HALF_UP;

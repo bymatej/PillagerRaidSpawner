@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty;
 import com.bymatej.minecraft.plugins.pillagerraidspawner.event.StartRaidEvent;
 import com.bymatej.minecraft.plugins.pillagerraidspawner.event.StopRaidEvent;
 
@@ -14,8 +15,8 @@ import static com.bymatej.minecraft.plugins.pillagerraidspawner.PillagerRaidSpaw
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.PillagerRaidSpawner.getPluginReference;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.START;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.STOP;
-import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.StartPillagerRaidCommand.Difficulty.MEDIUM;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.validator.StartPillagerRaidCommandValidator.validateCommand;
+import static com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty.MEDIUM;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
@@ -129,12 +130,6 @@ public class StartPillagerRaidCommand implements CommandExecutor {
     private void stopRaid() {
         StopRaidEvent stopRaidEvent = new StopRaidEvent();
         getPluginManager().callEvent(stopRaidEvent);
-    }
-
-    public enum Difficulty {
-        EASY,
-        MEDIUM,
-        HARD
     }
 
 }

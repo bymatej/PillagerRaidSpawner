@@ -4,7 +4,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.bymatej.minecraft.plugins.pillagerraidspawner.command.StartPillagerRaidCommand.Difficulty;
+import com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty;
 
 public class StartRaidEvent extends Event implements Cancellable {
 
