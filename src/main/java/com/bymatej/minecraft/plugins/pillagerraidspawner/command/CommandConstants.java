@@ -48,6 +48,7 @@ public class CommandConstants {
                                                                         asList(COMMAND_NAME, ""));
     }
 
+    @SafeVarargs
     public static <T> List<T> joinLists(List<T>... lists) {
         return Arrays.stream(lists).flatMap(Collection::stream).collect(Collectors.toList());
     }

@@ -102,5 +102,5 @@ This is not supposed to be here, but I don't care...
 
 Cleanup, build and deploy locally (for v19)
 ```
-./gradlew clean build && rm -rf ~/projects/private/minecraft/spigot-server-1.19.2/plugins/PillagerRaidSpawner/ || true && rm ~/projects/private/minecraft/spigot-server-1.19.2/plugins/PillagerRaidSpawner.jar || true && ln -s ~/projects/private/PillagerRaidSpawner/build/libs/PillagerRaidSpawner-0.1-SNAPSHOT.jar ~/projects/private/minecraft/spigot-server-1.19.2/plugins/PillagerRaidSpawner.jar
+./gradlew clean build && rm -rf ~/projects/private/minecraft/spigot-server-1.19.2/plugins/PillagerRaidSpawner/ || true && rm ~/projects/private/minecraft/spigot-server-1.19.2/plugins/PillagerRaidSpawner.jar || true && ln -s ~/projects/private/PillagerRaidSpawner/build/libs/PillagerRaidSpawner-1.1.jar ~/projects/private/minecraft/spigot-server-1.19.2/plugins/PillagerRaidSpawner.jar
 ```

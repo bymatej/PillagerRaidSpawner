@@ -26,7 +26,7 @@ public enum Difficulty {
 
     HARD(getHardPossibleRaidersList(),
          4,
-         6,
+         8,
          3,
          8,
          0.10);

@@ -1,9 +1,12 @@
 package com.bymatej.minecraft.plugins.pillagerraidspawner.command;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 
 import com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty;
@@ -16,17 +19,23 @@ import static com.bymatej.minecraft.plugins.pillagerraidspawner.PillagerRaidSpaw
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.START;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.STOP;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.validator.StartPillagerRaidCommandValidator.validateCommand;
+import static com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty.EASY;
+import static com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty.HARD;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty.MEDIUM;
+import static com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty.valueOf;
 import static java.lang.Boolean.parseBoolean;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Level.WARNING;
+import static java.util.stream.IntStream.rangeClosed;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.bukkit.Bukkit.getPluginManager;
 import static org.bukkit.Bukkit.getScheduler;
 
-public class StartPillagerRaidCommand implements CommandExecutor {
+public class StartPillagerRaidCommand implements TabExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -38,6 +47,44 @@ public class StartPillagerRaidCommand implements CommandExecutor {
         }
 
         return false;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+        switch (args.length) {
+            case 1: // /raid <start|stop>
+                return asList(START, STOP);
+
+            case 2: // /raid <start|stop> <1-60>
+                if (args[1].equalsIgnoreCase(STOP)) {
+                    return emptyList();
+                } else {
+                    return rangeClosed(1, 60)
+                             .boxed()
+                             .sorted()
+                             .map(Object::toString)
+                             .collect(Collectors.toList());
+                }
+
+            case 3: // /raid <start|stop> <1-60> <0.01-0.99>
+                return rangeClosed(1, 99)
+                         .boxed()
+                         .sorted()
+                         .map(n -> (double) n / 100)
+                         .map(Object::toString)
+                         .collect(Collectors.toList());
+
+            case 4: // /raid <start|stop> <1-60> <0.01-0.99> <true|false>
+                return asList("true", "false");
+
+            case 5: // /raid <start|stop> <1-60> <0.01-0.99> <true|false> <easy|medium|hard>
+                return asList(EASY.name().toLowerCase(),
+                              MEDIUM.name().toLowerCase(),
+                              HARD.name().toLowerCase());
+
+            default:
+                return emptyList();
+        }
     }
 
     private void executeCommand(Command command, CommandSender sender, String[] args) throws CommandException {
@@ -81,7 +128,7 @@ public class StartPillagerRaidCommand implements CommandExecutor {
                 startRaid(parseInt(args[1]), parseDouble(args[2]), parseBoolean(args[3]), MEDIUM);
                 break;
             case 5:
-                Difficulty difficulty = Difficulty.valueOf(args[4].toUpperCase());
+                Difficulty difficulty = valueOf(args[4].toUpperCase());
                 startRaid(parseInt(args[1]), parseDouble(args[2]), parseBoolean(args[3]), difficulty);
                 break;
             default:

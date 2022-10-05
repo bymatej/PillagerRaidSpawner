@@ -29,9 +29,9 @@ public class RaidUtils {
 
         for (int i = 0; i < getNumberOfRaidersToSpawn(difficulty); i++) {
             Entity raider;
+            EntityType entityType = difficulty.getPossibleRaiders().next();
 
             if (isSetCustomNameForRaider(difficulty)) {
-                EntityType entityType = difficulty.getPossibleRaiders().next();
                 raider = spawnEntityNearPlayer(player,
                                                entityType,
                                                difficulty.getMinBlocksAwayToSpawn(),
@@ -40,7 +40,7 @@ public class RaidUtils {
                                                false);
             } else {
                 raider = spawnEntityNearPlayer(player,
-                                               difficulty.getPossibleRaiders().next(),
+                                               entityType,
                                                difficulty.getMinBlocksAwayToSpawn(),
                                                difficulty.getMaxBlocksAwayToSpawn(),
                                                false);
