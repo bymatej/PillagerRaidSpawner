@@ -1,5 +1,7 @@
 package com.bymatej.minecraft.plugins.pillagerraidspawner.command;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,7 +58,7 @@ public class StartPillagerRaidCommand implements TabExecutor {
                 return asList(START, STOP);
 
             case 2: // /raid <start|stop> <1-60>
-                if (args[1].equalsIgnoreCase(STOP)) {
+                if (args[0].equalsIgnoreCase(STOP)) {
                     return emptyList();
                 } else {
                     return rangeClosed(1, 60)
