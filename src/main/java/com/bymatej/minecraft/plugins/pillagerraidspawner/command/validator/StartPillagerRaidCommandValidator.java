@@ -11,6 +11,7 @@ import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandC
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.MINIMUM_ARGUMENTS_NUMBER;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.VALID_DIFFICULTY_PARAMETERS;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.VALID_FIRST_PARAMETERS;
+import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.VALID_WORLD_SPAWN_PARAMETERS;
 import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 import static java.lang.String.format;
@@ -81,32 +82,40 @@ public class StartPillagerRaidCommandValidator {
             }
         }
 
-        // Validate third parameter (hardness increment)
-        if (args.length >= 3) {
+        // Validate third parameter (difficulty)
+        if (args.length == 3 && !VALID_DIFFICULTY_PARAMETERS.contains(args[2].toLowerCase())) {
+            message = "Parameter " + args[2] + " is not a valid parameter to specify the difficulty. Valid parameters are: " + join(",",
+                                                                                                                                    VALID_DIFFICULTY_PARAMETERS);
+            throwCommandException(sender, message);
+        }
+
+        // Validate fourth parameter (difficulty)
+        if (args.length == 4 && !VALID_WORLD_SPAWN_PARAMETERS.contains(args[3].toLowerCase())) {
+            message = "Parameter " + args[3] + " is not a valid parameter to specify the world where Raiders may spawn. Valid parameters are: " + join(",",
+                                                                                                                                                       VALID_WORLD_SPAWN_PARAMETERS);
+            throwCommandException(sender, message);
+        }
+
+        // Validate fifth parameter (hardness increment)
+        if (args.length >= 5) {
             try {
-                double hardnessIncrement = parseDouble(args[2]);
+                double hardnessIncrement = parseDouble(args[4]);
                 if (hardnessIncrement < 0.01 || hardnessIncrement > 0.99) {
                     message = "Increments below 0.01 are too small and may be unnoticeable. Increments over 0.99 are too high and may kill the server (by spawning too many mobs)";
                     throwCommandException(sender, message);
                 }
             } catch (NumberFormatException e) {
-                message = format("Parameter \"%s\" is not a decimal number!", args[2]);
+                message = format("Parameter \"%s\" is not a decimal number!", args[4]);
                 throwCommandException(sender, message, e);
             }
         }
 
-        // Validate fourth parameter (flag to ignore hardness increment and multiplier)
-        if (args.length >= 4 && !args[3].equalsIgnoreCase("true") && !args[3].equalsIgnoreCase("false")) {
-            message = format("Parameter \"%s\" is not \"true\", nor \"false\". The value \"%s\" is considered as \"false\"!", args[3], args[3]);
+        // Validate sixth parameter (flag to ignore hardness increment and multiplier)
+        if (args.length >= 6 && !args[5].equalsIgnoreCase("true") && !args[5].equalsIgnoreCase("false")) {
+            message = format("Parameter \"%s\" is not \"true\", nor \"false\". The value \"%s\" is considered as \"false\"!", args[5], args[5]);
             sender.sendMessage(message);
         }
 
-        // Validate fifth parameter (difficulty)
-        if (args.length == 5 && !VALID_DIFFICULTY_PARAMETERS.contains(args[4].toLowerCase())) {
-            message = "Parameter " + args[4] + " is not a valid parameter to specify the difficulty. Valid parameters are: " + join(",",
-                                                                                                                                    VALID_DIFFICULTY_PARAMETERS);
-            throwCommandException(sender, message);
-        }
     }
 
     private static void throwCommandException(String message) {

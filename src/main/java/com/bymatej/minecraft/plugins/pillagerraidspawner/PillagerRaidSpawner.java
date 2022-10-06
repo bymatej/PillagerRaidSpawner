@@ -6,6 +6,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.bymatej.minecraft.plugins.pillagerraidspawner.command.StartPillagerRaidCommand;
+import com.bymatej.minecraft.plugins.pillagerraidspawner.command.StartPillagerRaidCommandExecutor;
 import com.bymatej.minecraft.plugins.pillagerraidspawner.listener.StartRaidEventListener;
 import com.bymatej.minecraft.plugins.pillagerraidspawner.listener.StopRaidEventListener;
 
@@ -27,6 +28,8 @@ public final class PillagerRaidSpawner extends JavaPlugin {
     private int raidHardnessMultiplier; // raid hardness - grows over time (based on raidHardnessIncrementor). Formula: spawn mobs for raid * raidHardnessMultiplier
 
     private boolean isRaidStarted; // flag to prevent starting multiple raid-starter tasks
+
+    private StartPillagerRaidCommand raidCommand;
 
     @Override
     public void onEnable() {
@@ -51,7 +54,7 @@ public final class PillagerRaidSpawner extends JavaPlugin {
     }
 
     private void registerCommands() {
-        requireNonNull(getCommand("raid")).setExecutor(new StartPillagerRaidCommand());
+        requireNonNull(getCommand("raid")).setExecutor(new StartPillagerRaidCommandExecutor());
     }
 
     private void registerEventListeners() {
@@ -109,5 +112,13 @@ public final class PillagerRaidSpawner extends JavaPlugin {
 
     public void setRaidStarted(boolean raidStarted) {
         isRaidStarted = raidStarted;
+    }
+
+    public StartPillagerRaidCommand getRaidCommand() {
+        return raidCommand;
+    }
+
+    public void setRaidCommand(StartPillagerRaidCommand raidCommand) {
+        this.raidCommand = raidCommand;
     }
 }

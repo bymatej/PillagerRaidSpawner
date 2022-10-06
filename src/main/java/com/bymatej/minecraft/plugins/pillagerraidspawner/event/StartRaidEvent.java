@@ -5,6 +5,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty;
+import com.bymatej.minecraft.plugins.pillagerraidspawner.common.WorldSpawn;
 
 public class StartRaidEvent extends Event implements Cancellable {
 
@@ -17,6 +18,8 @@ public class StartRaidEvent extends Event implements Cancellable {
     private boolean isIgnoreHardnessMultiplier;
 
     private Difficulty difficulty;
+
+    private WorldSpawn worldSpawn;
 
     @Override
     public boolean isCancelled() {
@@ -59,5 +62,13 @@ public class StartRaidEvent extends Event implements Cancellable {
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public WorldSpawn getWorldSpawn() {
+        return worldSpawn;
+    }
+
+    public void setWorldSpawn(WorldSpawn worldSpawn) {
+        this.worldSpawn = worldSpawn;
     }
 }

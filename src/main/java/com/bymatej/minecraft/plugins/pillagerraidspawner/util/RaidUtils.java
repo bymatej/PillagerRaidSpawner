@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -19,6 +19,7 @@ import static org.apache.commons.lang3.BooleanUtils.isFalse;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.bukkit.Sound.ENTITY_PILLAGER_CELEBRATE;
 import static org.bukkit.Sound.EVENT_RAID_HORN;
+import static org.bukkit.attribute.Attribute.GENERIC_MOVEMENT_SPEED;
 
 public class RaidUtils {
 
@@ -121,8 +122,9 @@ public class RaidUtils {
 
     private static void increaseRaiderSpeed(Entity raider, Difficulty difficulty) {
         try {
-            double baseSpeed = Objects.requireNonNull(((Raider) raider).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).getBaseValue();
-            Objects.requireNonNull(((Raider) raider).getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)).setBaseValue(baseSpeed + difficulty.getSpeedIncrement());
+            AttributeInstance attribute = Objects.requireNonNull(((Raider) raider).getAttribute(GENERIC_MOVEMENT_SPEED));
+            double baseSpeed = attribute.getBaseValue();
+            attribute.setBaseValue(baseSpeed + difficulty.getSpeedIncrement());
         } catch (Exception e) {
             // catch silently
         }
