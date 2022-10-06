@@ -10,6 +10,8 @@ public class StopRaidEvent extends Event implements Cancellable {
 
     private boolean cancelled = false;
 
+    private boolean pauseOnly = false;
+
     @Override
     public boolean isCancelled() {
         return this.cancelled;
@@ -27,5 +29,13 @@ public class StopRaidEvent extends Event implements Cancellable {
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
+    }
+
+    public boolean isPauseOnly() {
+        return pauseOnly;
+    }
+
+    public void setPauseOnly(boolean pauseOnly) {
+        this.pauseOnly = pauseOnly;
     }
 }

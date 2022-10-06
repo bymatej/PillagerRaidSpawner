@@ -18,6 +18,7 @@ import org.bukkit.entity.Witch;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import com.bymatej.minecraft.plugins.pillagerraidspawner.command.StartPillagerRaidCommand;
 import com.bymatej.minecraft.plugins.pillagerraidspawner.event.StopRaidEvent;
 
 import static com.bymatej.minecraft.plugin.utils.logging.LoggingUtils.log;
@@ -35,9 +36,16 @@ public class StopRaidEventListener implements Listener {
         }
 
         getScheduler().cancelTask(getPluginReference().getStartRaidSyncRepeatingTaskId());
-        getPluginReference().setRaidHardnessMultiplier(1);
-        getPluginReference().setRaidHardnessIncrement(1.);
-        getPluginReference().getServer().broadcastMessage("The raid has been stopped. Phew...");
+
+        if (event.isPauseOnly()) {
+            getPluginReference().getServer().broadcastMessage("The raid has been paused. Phew... (for now)");
+        } else {
+            getPluginReference().setRaidHardnessMultiplier(1);
+            getPluginReference().setRaidHardnessIncrement(1.);
+            getPluginReference().setRaidCommand(new StartPillagerRaidCommand()); // reset
+            getPluginReference().getServer().broadcastMessage("The raid has been stopped. Phew...");
+        }
+
         getPluginReference().getServer().getOnlinePlayers().forEach(player -> {
             killNearbyRaiders(player);
             player.removePotionEffect(BAD_OMEN);
