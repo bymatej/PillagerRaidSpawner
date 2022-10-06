@@ -31,6 +31,12 @@ public class CommandConstants {
         // Stop parameter
         public static final String STOP = "stop";
 
+        // Pause parameter
+        public static final String PAUSE = "pause";
+
+        // Resume parameter
+        public static final String RESUME = "resume";
+
         // Difficulty parameters
         public static final String EASY = Difficulty.EASY.name().toLowerCase();
 
@@ -49,7 +55,9 @@ public class CommandConstants {
 
         // For validation
         public static final List<String> VALID_FIRST_PARAMETERS = asList(START,
-                                                                         STOP);
+                                                                         STOP,
+                                                                         PAUSE,
+                                                                         RESUME);
 
         public static final List<String> VALID_DIFFICULTY_PARAMETERS = asList(EASY,
                                                                               MEDIUM,

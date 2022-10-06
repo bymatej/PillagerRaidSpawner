@@ -9,6 +9,6 @@ website: bymatej.com
 commands:
   raid:
     description: Starts the the raid every X minutes
-    usage: /raid <start|stop> <1-60> <easy|medium|hard> <always|overworld_only|overworld_nether|overworld_end> <0.01-0.99> <true|false>
+    usage: /raid <start|stop|pause|resume> <1-60> <easy|medium|hard> <always|overworld_only|overworld_nether|overworld_end> <0.01-0.99> <true|false>
     aliases:
       - pillagerraid

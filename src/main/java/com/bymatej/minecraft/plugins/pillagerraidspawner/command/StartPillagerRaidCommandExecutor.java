@@ -17,6 +17,8 @@ import com.bymatej.minecraft.plugins.pillagerraidspawner.event.StopRaidEvent;
 import static com.bymatej.minecraft.plugin.utils.logging.LoggingUtils.log;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.PillagerRaidSpawner.DEBUG;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.PillagerRaidSpawner.getPluginReference;
+import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.PAUSE;
+import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.RESUME;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.START;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.CommandConstants.Raid.STOP;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.command.validator.StartPillagerRaidCommandValidator.validateCommand;
@@ -32,7 +34,9 @@ import static java.util.Collections.emptyList;
 import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Level.WARNING;
 import static java.util.stream.IntStream.rangeClosed;
+import static org.apache.commons.lang3.BooleanUtils.isFalse;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.bukkit.Bukkit.getPluginManager;
 import static org.bukkit.Bukkit.getScheduler;
@@ -55,11 +59,11 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         // Cannot use StartPillagerRaidCommand object here yet... :(
         switch (args.length) {
-            case 1: // /raid <start|stop>
-                return asList(START, STOP);
+            case 1: // /raid <start|stop|pause|resume>
+                return asList(START, STOP, PAUSE, RESUME);
 
-            case 2: // /raid <start|stop> <1-60>
-                if (args[0].equalsIgnoreCase(STOP)) {
+            case 2: // /raid <start|stop|pause|resume> <1-60>
+                if (isNotStartCommand(args[0])) {
                     return emptyList();
                 } else {
                     return rangeClosed(1, 60)
@@ -69,31 +73,49 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
                              .collect(Collectors.toList());
                 }
 
-            case 3: // /raid <start|stop> <1-60> <easy|medium|hard>
-                return asList(EASY.name().toLowerCase(),
-                              MEDIUM.name().toLowerCase(),
-                              HARD.name().toLowerCase());
+            case 3: // /raid <start|stop|pause|resume> <1-60> <easy|medium|hard>
+                if (isNotStartCommand(args[0])) {
+                    return emptyList();
+                } else {
+                    return asList(EASY.name().toLowerCase(),
+                                  MEDIUM.name().toLowerCase(),
+                                  HARD.name().toLowerCase());
+                }
 
-            case 4: // /raid <start|stop> <1-60> <easy|medium|hard> <always|overworld_only|overworld_nether|overworld_end>
+            case 4: // /raid <start|stop|pause|resume> <1-60> <easy|medium|hard> <always|overworld_only|overworld_nether|overworld_end>
                 return asList(ALWAYS.name().toLowerCase(),
                               OVERWORLD_ONLY.name().toLowerCase(),
                               OVERWORLD_NETHER.name().toLowerCase(),
                               OVERWORLD_END.name().toLowerCase());
 
-            case 5: // /raid <start|stop> <1-60> <easy|medium|hard> <always|overworld_only|overworld_nether|overworld_end> <0.01-0.99>
-                return rangeClosed(1, 99)
-                         .boxed()
-                         .sorted()
-                         .map(n -> (double) n / 100)
-                         .map(Object::toString)
-                         .collect(Collectors.toList());
+            case 5: // /raid <start|stop|pause|resume> <1-60> <easy|medium|hard> <always|overworld_only|overworld_nether|overworld_end> <0.01-0.99>
+                if (isNotStartCommand(args[0])) {
+                    return emptyList();
+                } else {
+                    return rangeClosed(1, 99)
+                             .boxed()
+                             .sorted()
+                             .map(n -> (double) n / 100)
+                             .map(Object::toString)
+                             .collect(Collectors.toList());
+                }
 
-            case 6: // /raid <start|stop> <1-60> <easy|medium|hard> <always|overworld_only|overworld_nether|overworld_end> <0.01-0.99> <true|false>
-                return asList("true", "false");
+            case 6: // /raid <start|stop|pause|resume> <1-60> <easy|medium|hard> <always|overworld_only|overworld_nether|overworld_end> <0.01-0.99> <true|false>
+                if (isNotStartCommand(args[0])) {
+                    return emptyList();
+                } else {
+                    return asList("true", "false");
+                }
 
             default:
                 return emptyList();
         }
+    }
+
+    private boolean isNotStartCommand(String argument) {
+        return argument.equalsIgnoreCase(STOP) ||
+               argument.equalsIgnoreCase(PAUSE) ||
+               argument.equalsIgnoreCase(RESUME);
     }
 
     private void executeCommand(Command command, CommandSender sender, String[] args) throws CommandException {
@@ -109,6 +131,10 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
                 handleStartRaidCommand(raidCommand);
             } else if (raidCommand.getCommandSwitch().equalsIgnoreCase(STOP)) {
                 handleStopRaidCommand();
+            } else if (raidCommand.getCommandSwitch().equalsIgnoreCase(PAUSE)) {
+                handlePauseRaidCommand();
+            } else if (raidCommand.getCommandSwitch().equalsIgnoreCase(RESUME)) {
+                handleResumeRaidCommand();
             } else {
                 String message = "This should never happen...";
                 sender.sendMessage(message);
@@ -168,12 +194,11 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
             raidCommand.setIgnoreHardnessFlag(false);
         }
 
-        getPluginReference().setRaidCommand(raidCommand); // Store it
         return raidCommand;
     }
 
     private void handleStartRaidCommand(StartPillagerRaidCommand command) {
-        if (command == null || command.getCommandSwitch() == null) {
+        if (command == null || isBlank(command.getCommandSwitch())) {
             throw new CommandException("An error occurred trying to execute the command");
         }
 
@@ -182,14 +207,38 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
                   command.getWorldSpawn(),
                   command.getHardnessIncrement(),
                   command.isIgnoreHardnessFlag());
+
+        getPluginReference().setRaidCommand(command); // Store it
     }
 
     private void handleStopRaidCommand() {
         if (isTrue(getPluginReference().isRaidStarted())) {
-            stopRaid();
+            stopRaid(false);
             getPluginReference().setRaidStarted(false);
         } else {
             getPluginReference().getServer().broadcastMessage("The raid is not started. Nothing to stop here...");
+        }
+    }
+
+    private void handlePauseRaidCommand() {
+        if (isTrue(getPluginReference().isRaidStarted())) {
+            pauseRaid();
+            getPluginReference().setRaidStarted(false);
+        } else {
+            getPluginReference().getServer().broadcastMessage("The raid is not started. Nothing to pause here...");
+        }
+    }
+
+    private void handleResumeRaidCommand() {
+        StartPillagerRaidCommand command = getPluginReference().getRaidCommand();
+
+        if (isFalse(getPluginReference().isRaidStarted()) &&
+            command != null &&
+            isNotBlank(command.getCommandSwitch())) {
+            handleStartRaidCommand(command);
+        } else {
+            getPluginReference().getServer()
+                                .broadcastMessage("The raid is already started, or was never run and paused. Nothing to resume here... Start a new raid");
         }
     }
 
@@ -224,9 +273,14 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
         getPluginManager().callEvent(startRaidEvent);
     }
 
-    private void stopRaid() {
+    private void stopRaid(boolean isPause) {
         StopRaidEvent stopRaidEvent = new StopRaidEvent();
+        stopRaidEvent.setPauseOnly(isPause);
         getPluginManager().callEvent(stopRaidEvent);
+    }
+
+    private void pauseRaid() {
+        stopRaid(true);
     }
 
 }
