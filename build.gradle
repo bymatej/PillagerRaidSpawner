@@ -3,10 +3,15 @@ plugins {
 }
 
 group = 'com.bymatej.minecraft.plugins'
-version = '1.1'
+version = '1.2'
 
 repositories {
     mavenCentral()
+    maven {
+        name = 'papermc-repo'
+        url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+
     maven {
         name = 'spigotmc-repo'
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
@@ -28,28 +33,29 @@ configurations {
 }
 
 dependencies {
-    compileOnly 'org.spigotmc:spigot-api:1.19.2-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT' // https://repo.papermc.io/service/rest/repository/browse/maven-public/io/papermc/paper/paper-api/
     compileOnly 'com.github.bymatej:minecraft-plugin-utils:0.0.2'
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     provided 'com.github.bymatej:minecraft-plugin-utils:0.0.2' // for FatJar only
 }
 
-def targetJavaVersion = 8
+def targetJavaVersion = 17
 java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    sourceCompatibility = javaVersion
-    targetCompatibility = javaVersion
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
+    toolchain.languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
+//    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+//    sourceCompatibility = javaVersion
+//    targetCompatibility = javaVersion
+//    if (JavaVersion.current() < javaVersion) {
+//        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+//    }
 }
 
-tasks.withType(JavaCompile).configureEach {
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        options.release = targetJavaVersion
-    }
-}
+//tasks.withType(JavaCompile).configureEach {
+//    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+//        options.release = targetJavaVersion
+//    }
+//}
 
 processResources {
     def props = [version: version]

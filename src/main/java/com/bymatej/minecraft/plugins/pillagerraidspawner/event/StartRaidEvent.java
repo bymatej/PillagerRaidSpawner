@@ -3,6 +3,7 @@ package com.bymatej.minecraft.plugins.pillagerraidspawner.event;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.jetbrains.annotations.NotNull;
 
 import com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty;
 import com.bymatej.minecraft.plugins.pillagerraidspawner.common.WorldSpawn;
@@ -32,10 +33,11 @@ public class StartRaidEvent extends Event implements Cancellable {
     }
 
     @Override
-    public HandlerList getHandlers() {
+    public @NotNull HandlerList getHandlers() {
         return HANDLERS;
     }
 
+    @SuppressWarnings("java:S4144") // in spite of it being the same as getHandlers, it's required by Spigot/Paper
     public static HandlerList getHandlerList() {
         return HANDLERS;
     }

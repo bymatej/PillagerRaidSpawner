@@ -15,6 +15,7 @@ import com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty;
 import static com.bymatej.minecraft.plugin.utils.entity.NearPlayerEntitySpawner.spawnEntityNearPlayer;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.PillagerRaidSpawner.getPluginReference;
 import static java.util.Arrays.asList;
+import static net.kyori.adventure.text.Component.text;
 import static org.apache.commons.lang3.BooleanUtils.isFalse;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.bukkit.Sound.ENTITY_PILLAGER_CELEBRATE;
@@ -45,6 +46,7 @@ public class RaidUtils {
                                                difficulty.getMinBlocksAwayToSpawn(),
                                                difficulty.getMaxBlocksAwayToSpawn(),
                                                false);
+                raider.setCustomNameVisible(false);
             }
 
             increaseRaiderSpeed(raider, difficulty);
@@ -52,7 +54,7 @@ public class RaidUtils {
         }
 
         playSoundAfterRaidSpawns(player, raiders.get(getPluginReference().getRandom().nextInt(raiders.size())));
-        getPluginReference().getServer().broadcastMessage("Spawned " + raiders.size() + " near " + player.getName());
+        getPluginReference().getServer().broadcast(text("Spawned " + raiders.size() + " near " + player.getName()));
     }
 
     private static String getCustomRaiderName(Player player, Difficulty difficulty, EntityType entityType) {
@@ -60,18 +62,13 @@ public class RaidUtils {
             return EMPTY;
         }
 
-        switch (entityType) {
-            case PILLAGER:
-                return getPillagerCustomName(player);
-            case VINDICATOR:
-                return getVindicatorCustomName(player);
-            case WITCH:
-                return getWitchCustomName(player);
-            default:
-                return "Killer";
-
-            // RAVAGER, EVOKER, and ILLUSIONER spawn only in HARD difficulty, and there are no custom names in HARD difficulty
-        }
+        // RAVAGER, EVOKER, and ILLUSIONER spawn only in HARD difficulty, and there are no custom names in HARD difficulty
+        return switch (entityType) {
+            case PILLAGER -> getPillagerCustomName(player);
+            case VINDICATOR -> getVindicatorCustomName(player);
+            case WITCH -> getWitchCustomName(player);
+            default -> "Killer";
+        };
     }
 
     private static int getNumberOfRaidersToSpawn(Difficulty difficulty) {
@@ -110,14 +107,12 @@ public class RaidUtils {
     }
 
     private static boolean isSetCustomNameForRaider(Difficulty difficulty) {
-        switch (difficulty) {
-            case EASY:
-                return true;
-            case HARD:
-                return false;
-            default:
-                return getPluginReference().getRandom().nextBoolean(); // It's 50:50 the Raider will have a name in Medium difficulty
-        }
+        return switch (difficulty) {
+            case EASY -> true;
+            case HARD -> false;
+            // It's 50:50 the Raider will have a name in Medium difficulty
+            default -> getPluginReference().getRandom().nextBoolean();
+        };
     }
 
     private static void increaseRaiderSpeed(Entity raider, Difficulty difficulty) {

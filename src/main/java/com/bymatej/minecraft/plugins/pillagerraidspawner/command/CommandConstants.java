@@ -54,28 +54,37 @@ public class CommandConstants {
         public static final String OVERWORLD_END = WorldSpawn.OVERWORLD_END.name().toLowerCase();
 
         // For validation
-        public static final List<String> VALID_FIRST_PARAMETERS = asList(START,
-                                                                         STOP,
-                                                                         PAUSE,
-                                                                         RESUME);
+        public static List<String> getValidFirstParameters() {
+            return asList(START,
+                          STOP,
+                          PAUSE,
+                          RESUME);
+        }
 
-        public static final List<String> VALID_DIFFICULTY_PARAMETERS = asList(EASY,
-                                                                              MEDIUM,
-                                                                              HARD);
+        public static List<String> getValidDifficultyParameters() {
+            return asList(EASY,
+                          MEDIUM,
+                          HARD);
+        }
 
-        public static final List<String> VALID_WORLD_SPAWN_PARAMETERS = asList(ALWAYS,
-                                                                               OVERWORLD_ONLY,
-                                                                               OVERWORLD_NETHER,
-                                                                               OVERWORLD_END);
+        public static List<String> getValidWorldSpawnParameters() {
+            return asList(ALWAYS,
+                          OVERWORLD_ONLY,
+                          OVERWORLD_NETHER,
+                          OVERWORLD_END);
+        }
 
-        public static final List<String> FORBIDDEN_KEYWORDS = joinLists(VALID_FIRST_PARAMETERS,
-                                                                        VALID_DIFFICULTY_PARAMETERS,
-                                                                        VALID_WORLD_SPAWN_PARAMETERS,
-                                                                        asList(COMMAND_NAME, ""));
+        public static List<String> getForbiddenKeywords() {
+            return joinLists(getValidFirstParameters(),
+                             getValidDifficultyParameters(),
+                             getValidWorldSpawnParameters(),
+                             asList(COMMAND_NAME, ""));
+        }
     }
 
     @SafeVarargs
-    public static <T> List<T> joinLists(List<T>... lists) {
+    @SuppressWarnings("java:S3398") // Intentionally outside of Raid class
+    private static <T> List<T> joinLists(List<T>... lists) {
         return Arrays.stream(lists).flatMap(Collection::stream).collect(Collectors.toList());
     }
 

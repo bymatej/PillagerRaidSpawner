@@ -8,6 +8,7 @@ import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import com.bymatej.minecraft.plugins.pillagerraidspawner.common.Difficulty;
 import com.bymatej.minecraft.plugins.pillagerraidspawner.common.WorldSpawn;
@@ -34,6 +35,7 @@ import static java.util.Collections.emptyList;
 import static java.util.logging.Level.SEVERE;
 import static java.util.logging.Level.WARNING;
 import static java.util.stream.IntStream.rangeClosed;
+import static net.kyori.adventure.text.Component.text;
 import static org.apache.commons.lang3.BooleanUtils.isFalse;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -44,7 +46,7 @@ import static org.bukkit.Bukkit.getScheduler;
 public class StartPillagerRaidCommandExecutor implements TabExecutor {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         try {
             executeCommand(command, sender, args);
             return true;
@@ -56,7 +58,7 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         // Cannot use StartPillagerRaidCommand object here yet... :(
         switch (args.length) {
             case 1: // /raid <start|stop|pause|resume>
@@ -151,47 +153,42 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
 
     private StartPillagerRaidCommand generateRaidCommand(String[] args) {
         StartPillagerRaidCommand raidCommand = new StartPillagerRaidCommand();
+        // Set defaults
+        raidCommand.setCommandSwitch(null);
+        raidCommand.setNumberOfMinutes(2);
+        raidCommand.setDifficulty(MEDIUM);
+        raidCommand.setWorldSpawn(ALWAYS);
+        raidCommand.setHardnessIncrement(0.05);
+        raidCommand.setIgnoreHardnessFlag(false);
 
         // Set 1st argument to command object
         if (isNotBlank(args[0])) {
             raidCommand.setCommandSwitch(args[0]);
-        } else {
-            raidCommand.setCommandSwitch(null);
         }
 
         // Set 2nd argument to command object
-        if (args.length > 2 && isNotBlank(args[1])) {
+        if (args.length >= 2 && isNotBlank(args[1])) {
             raidCommand.setNumberOfMinutes(args[1]);
-        } else {
-            raidCommand.setNumberOfMinutes(2);
         }
 
         // Set 3rd argument to command object
-        if (args.length > 3 && isNotBlank(args[2])) {
+        if (args.length >= 3 && isNotBlank(args[2])) {
             raidCommand.setDifficulty(args[2]);
-        } else {
-            raidCommand.setDifficulty(MEDIUM);
         }
 
         // Set 4th argument to command object
-        if (args.length > 4 && isNotBlank(args[3])) {
+        if (args.length >= 4 && isNotBlank(args[3])) {
             raidCommand.setWorldSpawn(args[3]);
-        } else {
-            raidCommand.setWorldSpawn(ALWAYS);
         }
 
         // Set 5th argument to command object
-        if (args.length > 5 && isNotBlank(args[4])) {
+        if (args.length >= 5 && isNotBlank(args[4])) {
             raidCommand.setHardnessIncrement(args[4]);
-        } else {
-            raidCommand.setHardnessIncrement(0.05);
         }
 
         // Set 6th argument to command object
-        if (args.length > 6 && isNotBlank(args[5])) {
+        if (args.length >= 6 && isNotBlank(args[5])) {
             raidCommand.setIgnoreHardnessFlag(args[5]);
-        } else {
-            raidCommand.setIgnoreHardnessFlag(false);
         }
 
         return raidCommand;
@@ -216,7 +213,7 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
             stopRaid(false);
             getPluginReference().setRaidStarted(false);
         } else {
-            getPluginReference().getServer().broadcastMessage("The raid is not started. Nothing to stop here...");
+            getPluginReference().getServer().broadcast(text("The raid is not started. Nothing to stop here..."));
         }
     }
 
@@ -225,7 +222,7 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
             pauseRaid();
             getPluginReference().setRaidStarted(false);
         } else {
-            getPluginReference().getServer().broadcastMessage("The raid is not started. Nothing to pause here...");
+            getPluginReference().getServer().broadcast(text("The raid is not started. Nothing to pause here..."));
         }
     }
 
@@ -238,7 +235,7 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
             handleStartRaidCommand(command);
         } else {
             getPluginReference().getServer()
-                                .broadcastMessage("The raid is already started, or was never run and paused. Nothing to resume here... Start a new raid");
+                                .broadcast(text("The raid is already started, or was never run and paused. Nothing to resume here... Start a new raid"));
         }
     }
 
@@ -250,12 +247,12 @@ public class StartPillagerRaidCommandExecutor implements TabExecutor {
         }
 
         if (isTrue(getPluginReference().isRaidStarted())) {
-            getPluginReference().getServer().broadcastMessage("The raid is already started. You cannot start a new raid!");
+            getPluginReference().getServer().broadcast(text("The raid is already started. You cannot start a new raid!"));
             return;
         }
 
         String message = "The Pillager raid has started! New raid will spawn every " + periodInMinutes + (periodInMinutes == 1 ? " minute" : " minutes");
-        getPluginReference().getServer().broadcastMessage(message);
+        getPluginReference().getServer().broadcast(text(message));
 
         int taskId = getScheduler().scheduleSyncRepeatingTask(getPluginReference(),
                                                               () -> spawnRaid(hardnessIncrement, isIgnoreHardnessMultiplier, difficulty, worldSpawn),

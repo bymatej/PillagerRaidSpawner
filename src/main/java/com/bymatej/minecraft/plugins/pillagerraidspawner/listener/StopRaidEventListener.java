@@ -24,6 +24,7 @@ import com.bymatej.minecraft.plugins.pillagerraidspawner.event.StopRaidEvent;
 import static com.bymatej.minecraft.plugin.utils.logging.LoggingUtils.log;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.PillagerRaidSpawner.DEBUG;
 import static com.bymatej.minecraft.plugins.pillagerraidspawner.PillagerRaidSpawner.getPluginReference;
+import static net.kyori.adventure.text.Component.text;
 import static org.bukkit.Bukkit.getScheduler;
 import static org.bukkit.potion.PotionEffectType.BAD_OMEN;
 
@@ -38,12 +39,12 @@ public class StopRaidEventListener implements Listener {
         getScheduler().cancelTask(getPluginReference().getStartRaidSyncRepeatingTaskId());
 
         if (event.isPauseOnly()) {
-            getPluginReference().getServer().broadcastMessage("The raid has been paused. Phew... (for now)");
+            getPluginReference().getServer().broadcast(text("The raid has been paused. Phew... (for now)"));
         } else {
             getPluginReference().setRaidHardnessMultiplier(1);
             getPluginReference().setRaidHardnessIncrement(1.);
             getPluginReference().setRaidCommand(new StartPillagerRaidCommand()); // reset
-            getPluginReference().getServer().broadcastMessage("The raid has been stopped. Phew...");
+            getPluginReference().getServer().broadcast(text("The raid has been stopped. Phew..."));
         }
 
         getPluginReference().getServer().getOnlinePlayers().forEach(player -> {

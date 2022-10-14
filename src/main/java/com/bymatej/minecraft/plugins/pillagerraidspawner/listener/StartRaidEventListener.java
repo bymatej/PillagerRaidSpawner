@@ -70,8 +70,10 @@ public class StartRaidEventListener implements Listener {
         // If the hardness multiplier is disabled, it will always be set to 1, so the above for loop will always loop only once
         if (isFalse(event.isIgnoreHardnessMultiplier())) {
             BigDecimal result = ONE.multiply(BigDecimal.valueOf(getPluginReference().getRaidHardnessIncrement())).setScale(2, HALF_UP);
-            getPluginReference().setRaidHardnessMultiplier((int) result.doubleValue());
-            getPluginReference().setRaidHardnessIncrement(getPluginReference().getRaidHardnessIncrement() + event.getHardnessIncrement());
+            if (getPluginReference().getRaidHardnessMultiplier() < 20) { // Limit to multiplier of 20 - not to kill the server
+                getPluginReference().setRaidHardnessMultiplier((int) result.doubleValue());
+                getPluginReference().setRaidHardnessIncrement(getPluginReference().getRaidHardnessIncrement() + event.getHardnessIncrement());
+            }
         }
     }
 
