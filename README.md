@@ -5,8 +5,8 @@ Raids are spawned for each player on the server, somewhere around the player at 
 
 # Dependencies and versions
 
-This was developed and tested using Paper 1.19.2 API (`io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT`). During the development Java 17 was used.
-During testing (on local Paper server) Java 18 was used. Minecraft 1.19.2 was also used in testing.
+This was developed and tested using Paper 1.19.4 API (`io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT`). During the development Java 17 was used.
+During testing (on local Paper server) Java 18 was used. Minecraft 1.19.4 was also used in testing.
 
 This project also depends on [my minecraft plugin utils](https://github.com/bymatej/minecraft-plugin-utils).
 
@@ -171,7 +171,11 @@ This is not supposed to be here, but I don't care...
 
 Cleanup, build and deploy locally (for v19)
 ```
-./gradlew clean build && rm -rf ~/projects/private/minecraft/paper-server-1.19.2/plugins/PillagerRaidSpawner/ || true && rm ~/projects/private/minecraft/paper-server-1.19.2/plugins/PillagerRaidSpawner.jar || true && ln -s ~/projects/private/PillagerRaidSpawner/build/libs/PillagerRaidSpawner-1.2.jar ~/projects/private/minecraft/paper-server-1.19.2/plugins/PillagerRaidSpawner.jar
+./gradlew clean build && rm -rf ~/projects/private/minecraft/paper-server-1.19.4/plugins/PillagerRaidSpawner/ || true && rm ~/projects/private/minecraft/paper-server-1.19.4/plugins/PillagerRaidSpawner.jar || true && ln -s ~/projects/private/PillagerRaidSpawner/build/libs/PillagerRaidSpawner-1.2.jar ~/projects/private/minecraft/paper-server-1.19.4/plugins/PillagerRaidSpawner.jar
+```
+
+```
+./gradlew clean build && rm -rf ~/projects/minecraft/paper-server-1.19.4/plugins/PillagerRaidSpawner/ || true && rm ~/projects/minecraft/paper-server-1.19.4/plugins/PillagerRaidSpawner.jar || true && ln -s ~/projects/PillagerRaidSpawner/build/libs/PillagerRaidSpawner-1.3.jar ~/projects/minecraft/paper-server-1.19.4/plugins/PillagerRaidSpawner.jar
 ```
 
 ##### Debug

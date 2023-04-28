@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.bymatej.minecraft.plugins'
-version = '1.2'
+version = '1.3'
 
 repositories {
     mavenCentral()
@@ -33,11 +33,11 @@ configurations {
 }
 
 dependencies {
-    compileOnly 'io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT' // https://repo.papermc.io/service/rest/repository/browse/maven-public/io/papermc/paper/paper-api/
-    compileOnly 'com.github.bymatej:minecraft-plugin-utils:0.0.2'
+    compileOnly 'io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT' // https://repo.papermc.io/service/rest/repository/browse/maven-public/io/papermc/paper/paper-api/
+    compileOnly 'com.github.bymatej:minecraft-plugin-utils:0.0.3'
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-    provided 'com.github.bymatej:minecraft-plugin-utils:0.0.2' // for FatJar only
+    provided 'com.github.bymatej:minecraft-plugin-utils:0.0.3' // for FatJar only
 }
 
 def targetJavaVersion = 17
