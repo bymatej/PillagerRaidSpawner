@@ -1,7 +1,7 @@
 name: PillagerRaidSpawner
 version: '${version}'
 main: com.bymatej.minecraft.plugins.pillagerraidspawner.PillagerRaidSpawner
-api-version: 1.19
+api-version: 1.21
 prefix: bymatej
 authors: [ Matej ]
 description: Spawns a pillager raid every X minutes
